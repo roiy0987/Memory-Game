@@ -16,18 +16,32 @@
   </head>
   <body>
     <div class="container">
+      <div id="timer">00:00:00</div>
+      <div class="button-timer m-2">
+        <button id="pause">Pause</button>
+      </div>
       <div class="menu">
         <form id="menu">
           <label for="name">Enter name:</label><br />
           <input type="text" id="name" name="name" required /><br />
-          <label for="pairs">Enter amount of pairs (1-30)</label><br />
+          <br />
+          <label for="pairs">Enter amount of pairs (1-30):</label><br />
           <input type="text" id="pairs" name="pairs" required /><br />
           <br />
           <input type="submit" value="Start Game" />
         </form>
       </div>
 
-      <div class="memory-game"></div>
+      <div class="memory-game mb-5"></div>
+      <div class="game-over">
+        <h1 class="win">Congratulations for winning the game!</h1>
+      </div>
+
+      <div class="button-menu mt-5 mb-10">
+        <form action="/">
+          <button type="submit" class="menu-btn">Back To Menu</button>
+        </form>
+      </div>
     </div>
 
     <script

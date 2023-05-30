@@ -2,7 +2,65 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  margin-top: 100px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: rgb(186, 247, 231);
+}
+
+body {
+  background-image: url("images/background.jpg"); /* Set a background image */
+  background-repeat: repeat; /* Prevent the background image from repeating */
+  background-size: cover;
+  color: aliceblue;
+}
+
+.button-timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  height: 50px;
+}
+
+#pause {
+  position: relative;
+  background-color: rgb(230, 34, 77);
+  border-radius: 5px;
+  box-shadow: rgb(121, 18, 55) 0px 4px 0px 0px;
+  padding: 15px;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  width: 154px;
+  height: 49px;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  transition: all 0.3s ease-in-out;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#pause::before {
+  content: "";
+  background-color: rgb(248, 50, 93);
+  width: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: width 700ms ease-in-out;
+  display: inline-block;
+}
+.button-menu {
+  display: flex;
+  justify-content: center;
+}
+
+#pause:hover::before {
+  width: 100%;
 }
 .card-row {
   display: inline-block;
@@ -12,6 +70,60 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+.menu-btn {
+  padding: 10px 20px;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
+  color: #fff;
+  border-radius: 7px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.5s;
+  transition-property: box-shadow;
+  background: rgb(0, 140, 255);
+  box-shadow: 0 0 25px rgb(0, 140, 255);
+}
+input {
+  font-family: monospace;
+  max-width: 190px;
+  outline: none;
+  border: 1px solid #dadada;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f3f7fe;
+  transition: 0.3s;
+  color: #3b82f6;
+}
+
+input:focus {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 0 4px #3b83f65f;
+}
+
+.menu-btn:hover {
+  box-shadow: 0 0 5px rgb(0, 140, 255), 0 0 25px rgb(0, 140, 255),
+    0 0 50px rgb(0, 140, 255), 0 0 100px rgb(0, 140, 255);
+}
+.game-over {
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  color: rgb(242, 97, 255);
+}
+#timer {
+  margin-top: 50px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  display: flex;
+  font-size: 40px;
+  color: rgb(186, 247, 231);
+  font-family: sans-serif;
+  justify-content: center;
+  align-items: center;
 }
 
 .memory-card {

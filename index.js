@@ -1,6 +1,11 @@
 $(document).ready(function () {
+  $(".game-over").hide();
+  $("#pause").hide();
+  $("#timer").hide();
+  $(".button-menu").hide();
   $("#menu").submit(function (event) {
-    event.preventDefault(); // Prevent the form from submitting
+    event.preventDefault();
+
     var formData = $(this).serializeArray();
     var name = formData[0].value;
     var number = formData[1].value;
@@ -12,11 +17,15 @@ $(document).ready(function () {
       alert("Please Enter a number (1-30)");
       return;
     }
+    $(".button-menu").show();
+    $("#player").text(name.toString());
+    $("#timer").show();
 
     $(this).hide();
-    // Extract the form data
 
-    // Use the extracted data as needed (e.g., display it, send it to a server, etc.)
+    let oneSelected = undefined;
+    let twoSelected = undefined;
+
     console.log("Name entered: " + name + " Number entered:" + number);
 
     var numbers = [];
@@ -27,7 +36,6 @@ $(document).ready(function () {
       numbers.push(i);
     }
 
-    // Shuffle the numbers array using Fisher-Yates algorithm
     for (var i = numbers.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var temp = numbers[i];
@@ -35,10 +43,58 @@ $(document).ready(function () {
       numbers[j] = temp;
     }
 
-    var numRows = Math.ceil(number / 10);
+    //var numRows = Math.ceil(number / 10);
 
-    // Assign the shuffled numbers in pairs to the memory cards
     var container = $(".memory-game");
+    var timerElement = $("#timer");
+    var seconds = 0;
+    var minutes = 0;
+    var hours = 0;
+
+    function updateTimer() {
+      seconds++;
+      if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+          minutes = 0;
+          hours++;
+        }
+      }
+
+      var formattedTime =
+        formatTime(hours) +
+        ":" +
+        formatTime(minutes) +
+        ":" +
+        formatTime(seconds);
+      timerElement.text(formattedTime);
+    }
+
+    function formatTime(time) {
+      return time < 10 ? "0" + time : time;
+    }
+
+    $("#pause").on("click", pauseButton);
+
+    function pauseButton() {
+      $(this).off("click", pauseButton);
+      cards.each(function () {
+        $(this).off("click", flipCard);
+      });
+      clearInterval(timerInterval);
+      $(this).text("Resume").on("click", resumeButton);
+    }
+
+    function resumeButton() {
+      $(this).off("click", resumeButton);
+      cards.each(function () {
+        $(this).on("click", flipCard);
+      });
+      timerInterval = setInterval(updateTimer, 1000);
+      $(this).text("Pause").on("click", pauseButton);
+    }
+
     for (var i = 0; i < numbers.length; i++) {
       var card = $("<div>").addClass("memory-card");
       var bold = $("<b>");
@@ -49,16 +105,54 @@ $(document).ready(function () {
       card.append(bold);
       card.append(content);
 
-      // Add a CSS class to adjust the layout
-      if (numRows > 1) {
-        card.addClass("card-row");
-      }
       container.append(card);
     }
     const cards = $(".memory-card");
-
+    let numberOfPairs = 0;
+    let gameStarted = false;
+    var timerInterval;
     function flipCard() {
-      $(this).toggleClass("active");
+      if (oneSelected == undefined) {
+        if (!gameStarted) {
+          gameStarted = true;
+          $("#pause").show();
+          timerInterval = setInterval(updateTimer, 1000);
+        }
+        oneSelected = $(this);
+        oneSelected.toggleClass("active");
+        return;
+      }
+      if (twoSelected == undefined && !$(this).is(oneSelected)) {
+        twoSelected = $(this);
+        if (twoSelected.text() == oneSelected.text()) {
+          twoSelected.toggleClass("active");
+          numberOfPairs++;
+          if (number == numberOfPairs) {
+            finishGame();
+          }
+          oneSelected = undefined;
+          twoSelected = undefined;
+          return;
+        }
+        twoSelected.toggleClass("active");
+        setTimeout(clearCards, 1000);
+        return;
+      }
+    }
+    function clearCards() {
+      oneSelected.toggleClass("active");
+      twoSelected.toggleClass("active");
+      oneSelected = undefined;
+      twoSelected = undefined;
+    }
+    function finishGame() {
+      $(".win").text(name + " Congratulations for winning the game!");
+      $(".game-over").show();
+      cards.each(function () {
+        $(this).off("click", flipCard);
+      });
+      clearInterval(timerInterval);
+      $("#pause").hide();
     }
 
     cards.each(function () {
